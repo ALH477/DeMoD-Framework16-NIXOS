@@ -1,41 +1,43 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixpkgs-unstable, ... }:
 
 {
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
   nixpkgs.overlays = [
     (final: prev: {
-      unstable = import (fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
-        sha256 = "sha256:1s3lxb33cwazlx72pygcbcc76bbgbhdil6q9bhqbzbjxj001zk0w";
-      }) {
+      unstable = import nixpkgs-unstable {
         system = prev.system;
         config.allowUnfree = true;
       };
     })
   ];
 
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  options.custom.steam.enable = lib.mkEnableOption "Steam and gaming support";
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [ "amdgpu.abmlevel=0" ];
 
-
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
+  services.displayManager.defaultSession = "hyprland";
   services.xserver.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
-  services.xserver.windowManager.dwm.enable = true;
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+    package = pkgs.unstable.hyprland;
   };
   systemd.defaultUnit = lib.mkForce "graphical.target";
 
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-hyprland ];
+    configPackages = [ pkgs.xdg-desktop-portal-hyprland ];
   };
 
   networking.hostName = "nixos";
@@ -43,9 +45,10 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.enableRedistributableFirmware = true;
+  powerManagement.cpuFreqGovernor = "performance";
 
   time.timeZone = "America/Los_Angeles";
-
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
@@ -82,21 +85,13 @@
   services.udisks2.enable = true;
   security.polkit.enable = true;
   services.power-profiles-daemon.enable = true;
-  services.fwupd.enable = true;
-  hardware.enableRedistributableFirmware = true;
-
-  hardware.graphics = {
+  services.fwupd = {
     enable = true;
-    enable32Bit = true;
-    package = pkgs.unstable.mesa;
-    package32 = pkgs.unstable.pkgsi686Linux.mesa;
-    extraPackages = with pkgs.unstable; [
-      mesa amdvlk vulkan-loader vulkan-tools vulkan-validation-layers libva libvdpau
-    ];
-    extraPackages32 = with pkgs.unstable.pkgsi686Linux; [
-      mesa amdvlk vulkan-loader vulkan-tools vulkan-validation-layers libva libvdpau
-    ];
+    extraConfig = {
+      UpdateOnBoot = true;
+    };
   };
+  services.mako.enable = true;
 
   services.fprintd.enable = true;
   security.pam.services = {
@@ -104,12 +99,36 @@
     sudo.fprintAuth = true;
   };
 
+  virtualisation.docker = {
+    enable = true;
+    autoStart = true;
+  };
+
+  programs.wireshark.enable = true;
+
   users.users.asher = {
     isNormalUser = true;
     description = "Asher";
     extraGroups = [ "networkmanager" "wheel" "docker" "wireshark" "disk" ];
     shell = pkgs.bash;
-    packages = with pkgs; [ ];
+    packages = with pkgs; [
+      (writeShellScriptBin "install-quicklisp" ''
+        curl -o /tmp/quicklisp.lisp https://beta.quicklisp.org/quicklisp.lisp
+        ${pkgs.sbcl}/bin/sbcl --load /tmp/quicklisp.lisp --eval '(quicklisp-quickstart:install)' --quit
+      '')
+    ];
+  };
+
+  systemd.user.services.quicklisp-install = {
+    description = "Install Quicklisp for D-LISP";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.writeShellScriptBin "install-quicklisp" ''
+        curl -o /tmp/quicklisp.lisp https://beta.quicklisp.org/quicklisp.lisp
+        ${pkgs.sbcl}/bin/sbcl --load /tmp/quicklisp.lisp --eval '(quicklisp-quickstart:install)' --quit
+      ''}/bin/install-quicklisp";
+    };
+    wantedBy = [ "default.target" ];
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -134,22 +153,51 @@
   };
 
   environment.systemPackages = with pkgs; [
-    vim git htop nvme-cli mangohud lm_sensors s-tui stress dmidecode util-linux gparted usbutils
+    vim docker git git-lfs gh htop nvme-cli lm_sensors s-tui stress dmidecode util-linux gparted usbutils
     python3Full python3Packages.pip python3Packages.virtualenv python3Packages.cryptography python3Packages.pycryptodome
     python3Packages.grpcio python3Packages.grpcio-tools python3Packages.protobuf
     python3Packages.numpy python3Packages.matplotlib
-    wireshark cmake kdePackages.kdenlive ardour blueberry vesktop audacity font-awesome fastfetch gnugrep scribus
+    wireshark cmake ardour blueberry vesktop audacity font-awesome fastfetch gnugrep
     gcc gnumake ninja kitty wofi waybar pavucontrol hyprpaper rustc cargo go openssl gnutls qemu virt-manager
-    ffmpeg jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio tcpdump nmap docker-compose docker-buildx
-    vulkan-tools vulkan-loader vulkan-validation-layers brave dwm hyprland vlc pandoc kdePackages.okular xorg.xinit steam-run libva-utils obs-studio xdg-desktop-portal-hyprland steam
+    ffmpeg jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio tcpdump nmap netcat docker-compose docker-buildx
+    vulkan-tools vulkan-loader vulkan-validation-layers brave hyprland vlc pandoc kdePackages.okular xorg.xinit libva-utils obs-studio xdg-desktop-portal-hyprland
     xfce.thunar xfce.thunar-volman gvfs udiskie polkit_gnome framework-tool brightnessctl
     gimp inkscape blender libreoffice krita protobufc grpc pkgconf
-    (perl.withPackages (ps: with ps; [ JSON GetoptLong CursesUI ModulePluggable Appcpanminus ]))
+    wl-clipboard grim slurp
+    mininet ns3
+    openvscode-server
+    (perl.withPackages (ps: with ps; [ JSON GetoptLong CursesUI ModulePluggable Appcpanminus GoogleProtocolBuffersDynamic GrpcXS ]))
+    (sbcl.withPackages (ps: with ps; [
+      cffi cl-ppcre cl-json jsonschema cl-csv usocket bordeaux-threads curses log4cl trivial-backtrace cl-store mgl hunchensocket fiveam cl-dot cl-lsquic cl-serial cl-can cl-sctp cl-zigbee cl-lorawan cl-protobufs cl-grpc
+    ]))
+    libserialport
+    can-utils
+    lksctp-tools
+    cjson
+    ncurses
+    libuuid
+    kicad
+    graphviz
+  ] ++ lib.optionals config.custom.steam.enable [
+    steam
+    steam-run
+    proton-ge-bin
+    linuxconsoletools
+    lutris
+    wineWowPackages.stable
   ];
 
-  programs.steam = {
+  programs.steam = lib.mkIf config.custom.steam.enable {
     enable = true;
     extraCompatPackages = [ pkgs.proton-ge-bin ];
+  };
+
+  hardware.steam-hardware = lib.mkIf config.custom.steam.enable {
+    enable = true;
+  };
+
+  programs.gamemode = lib.mkIf config.custom.steam.enable {
+    enable = true;
   };
 
   environment.etc."jack/conf.xml".text = ''
@@ -162,7 +210,22 @@
     </jack>
   '';
 
-  environment.sessionVariables.QT_QPA_PLATFORM = "wayland;xcb";
+  environment.etc."hypr/hyprland.conf".text = ''
+    monitor=,preferred,auto,1
+    exec-once=waybar
+    exec-once=hyprpaper
+    bind=SUPER,Return,exec,kitty
+    bind=SUPER,Q,killactive
+    bind=SUPER,M,exit
+    bind=SUPER,E,exec,thunar
+    bind=SUPER,Space,exec,wofi --show drun
+  '';
+
+  environment.sessionVariables = {
+    QT_QPA_PLATFORM = "wayland;xcb";
+    XDG_SESSION_TYPE = "wayland";
+    NIXOS_OZONE_WL = "1";
+  };
 
   system.stateVersion = "25.05";
 }
