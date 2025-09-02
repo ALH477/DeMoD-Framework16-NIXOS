@@ -12,18 +12,18 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, determinate, nixos-hardware, fw-fanctrl, ... }:
   let
     system = "x86_64-linux";
-    lib = nixpkgs.lib; # Define lib from nixpkgs
+    lib = nixpkgs.lib;
   in {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = { inherit nixpkgs-unstable lib; }; # Pass lib and nixpkgs-unstable to modules
+      specialArgs = { inherit nixpkgs-unstable lib; };
       modules = [
         determinate.nixosModules.default
         nixos-hardware.nixosModules.framework-16-7040-amd
         fw-fanctrl.nixosModules.default
         ./hardware-configuration.nix
         ./configuration.nix
-        {
+        ({ config, lib, ... }: {
           nixpkgs.overlays = [
             (final: prev: {
               unstable = import nixpkgs-unstable {
@@ -32,13 +32,11 @@
               };
             })
           ];
-          # Define options for Framework and fan control
           options.hardware.framework.enable = lib.mkEnableOption "Framework 16-inch 7040 AMD support";
           options.hardware.fw-fanctrl.enable = lib.mkEnableOption "Framework fan control";
-          # Enable Framework and fw-fanctrl by default
           hardware.framework.enable = true;
           hardware.fw-fanctrl.enable = true;
-        }
+        })
       ];
     };
   };
