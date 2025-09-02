@@ -6,7 +6,7 @@ Thank you for considering contributing to this NixOS configuration for DeMoD Com
 
 1. **Fork the Repository**:
    ```bash
-   git clone https://github.com/ALH477/nixos-dcf-config
+   git clone https://github.com/ALH477/DeMoD-Framework16-NIXOS
    cd nixos-dcf-config
    ```
 
