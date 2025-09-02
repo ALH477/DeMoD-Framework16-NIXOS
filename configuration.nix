@@ -91,11 +91,10 @@
     security.polkit.enable = true;
     services.power-profiles-daemon.enable = true;
     services.fwupd.enable = true;
-    environment.etc."fwupd/fwupd.conf".text = ''
+    environment.etc."fwupd/fwupd.conf".text = lib.mkForce ''
       [fwupd]
       UpdateOnBoot=true
     '';
-    services.mako.enable = true;
 
     services.fprintd.enable = true;
     security.pam.services = {
@@ -103,10 +102,7 @@
       sudo.fprintAuth = true;
     };
 
-    virtualisation.docker = {
-      enable = true;
-      autoStart = true;
-    };
+    virtualisation.docker.enable = true;
 
     programs.wireshark.enable = true;
 
@@ -168,11 +164,11 @@
       xfce.thunar xfce.thunar-volman gvfs udiskie polkit_gnome framework-tool brightnessctl
       gimp inkscape blender libreoffice krita protobufc grpc pkgconf
       wl-clipboard grim slurp
-      mininet ns3
-      openvscode-server
-      (perl.withPackages (ps: with ps; [ JSON GetoptLong CursesUI ModulePluggable Appcpanminus GoogleProtocolBuffersDynamic GrpcXS ]))
+      mininet
+      unstable.openvscode-server
+      (perl.withPackages (ps: with ps; [ JSON GetoptLong CursesUI ModulePluggable Appcpanminus ]))
       (sbcl.withPackages (ps: with ps; [
-        cffi cl-ppcre cl-json jsonschema cl-csv usocket bordeaux-threads curses log4cl trivial-backtrace cl-store mgl hunchensocket fiveam cl-dot cl-lsquic cl-serial cl-can cl-sctp cl-zigbee cl-lorawan cl-protobufs cl-grpc
+        cffi cl-ppcre cl-json cl-csv usocket bordeaux-threads log4cl trivial-backtrace cl-store hunchensocket fiveam cl-dot cserial-port
       ]))
       libserialport
       can-utils
@@ -182,11 +178,12 @@
       libuuid
       kicad
       graphviz
+      mako
     ] ++ lib.optionals config.custom.steam.enable [
       steam
       steam-run
       proton-ge-bin
-      linuxconsoletools
+      linuxConsoleTools
       lutris
       wineWowPackages.stable
     ];
@@ -218,6 +215,7 @@
       monitor=,preferred,auto,1
       exec-once=waybar
       exec-once=hyprpaper
+      exec-once=mako &
       bind=SUPER,Return,exec,kitty
       bind=SUPER,Q,killactive
       bind=SUPER,M,exit
