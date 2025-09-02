@@ -37,8 +37,8 @@ This repository provides a NixOS configuration optimized for development with th
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/<your-username>/nixos-dcf-config
-   cd nixos-dcf-config
+   git clone https://github.com/ALH477/DeMoD-Framework16-NIXOS
+   cd DeMoD-Framework16-NIXOS
    ```
 
 2. **Generate Hardware Configuration** (if not using Framework 16):
