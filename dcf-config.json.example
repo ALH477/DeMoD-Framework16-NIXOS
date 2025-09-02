@@ -1,0 +1,15 @@
+{
+     "transport": "gRPC",
+     "host": "localhost",
+     "port": 50051,
+     "mode": "client",
+     "node-id": "node-1",
+     "peers": ["localhost:50052"],
+     "serial-port": "/dev/ttyUSB0",
+     "baud-rate": 9600,
+     "can-interface": "can0",
+     "zigbee-device": "/dev/ttyACM0",
+     "lorawan-device": "/dev/ttyACM1",
+     "lorawan-app-eui": "0000000000000000",
+     "lorawan-app-key": "00000000000000000000000000000000"
+   }
