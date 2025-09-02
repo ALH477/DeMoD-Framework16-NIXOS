@@ -32,10 +32,14 @@
               };
             })
           ];
-          options.hardware.framework.enable = lib.mkEnableOption "Framework 16-inch 7040 AMD support";
-          options.hardware.fw-fanctrl.enable = lib.mkEnableOption "Framework fan control";
-          hardware.framework.enable = true;
-          hardware.fw-fanctrl.enable = true;
+          options = {
+            hardware.framework.enable = lib.mkEnableOption "Framework 16-inch 7040 AMD support";
+            hardware.fw-fanctrl.enable = lib.mkEnableOption "Framework fan control";
+          };
+          config = {
+            hardware.framework.enable = true;
+            hardware.fw-fanctrl.enable = true;
+          };
         })
       ];
     };
