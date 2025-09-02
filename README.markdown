@@ -99,7 +99,7 @@ This repository provides a NixOS configuration optimized for development with th
 ## Directory Structure
 
 ```
-nixos-dcf-config/
+DeMoD-Framework16-NIXOS/
 ├── flake.nix               # Flake configuration
 ├── configuration.nix       # Main NixOS configuration
 ├── hardware-configuration.nix  # Hardware-specific settings (generate with nixos-generate-config)
