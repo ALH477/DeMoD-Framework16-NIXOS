@@ -6,25 +6,14 @@
   ];
 
   options = {
-    custom.steam.enable = lib.mkEnableOption "Steam and gaming support";
+    custom.steam.enable = lib.mkEnableOption "Steam and gaming support" // { default = false; };
   };
 
   config = {
-    nixpkgs.overlays = [
-      (final: prev: {
-        unstable = import nixpkgs-unstable {
-          system = prev.system;
-          config.allowUnfree = true;
-        };
-      })
-    ];
-
-    custom.steam.enable = true;
-
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.kernelPackages = pkgs.linuxPackages_latest;
-    boot.kernelParams = [ "amdgpu.abmlevel=0" ];
+    boot.kernelParams = lib.optional config.hardware.framework.enable "amdgpu.abmlevel=0";
 
     services.displayManager.sddm = {
       enable = true;
@@ -37,12 +26,10 @@
       xwayland.enable = true;
       package = pkgs.unstable.hyprland;
     };
-    systemd.defaultUnit = lib.mkForce "graphical.target";
 
     xdg.portal = {
       enable = true;
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-      configPackages = [ ];
       config.common.default = "*";
     };
 
@@ -112,12 +99,6 @@
       description = "Asher";
       extraGroups = [ "networkmanager" "wheel" "docker" "wireshark" "disk" ];
       shell = pkgs.bash;
-      packages = with pkgs; [
-        (writeShellScriptBin "install-quicklisp" ''
-          curl -o /tmp/quicklisp.lisp https://beta.quicklisp.org/quicklisp.lisp
-          ${pkgs.sbcl}/bin/sbcl --load /tmp/quicklisp.lisp --eval '(quicklisp-quickstart:install)' --quit
-        '')
-      ];
     };
 
     systemd.user.services.quicklisp-install = {
@@ -134,23 +115,10 @@
 
     nixpkgs.config.allowUnfree = true;
 
-    systemd.timers.nix-gc-generations = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "weekly";
-        Persistent = true;
-      };
-    };
-
-    systemd.services.nix-gc-generations = {
-      script = ''
-        generations_to_delete=$(${pkgs.nix}/bin/nix-env -p /nix/var/nix/profiles/system --list-generations | ${pkgs.gawk}/bin/awk '{print $1}' | ${pkgs.coreutils}/bin/head -n -5 | ${pkgs.coreutils}/bin/tr '\n' ' ')
-        if [ -n "$generations_to_delete" ]; then
-          ${pkgs.nix}/bin/nix-env -p /nix/var/nix/profiles/system --delete-generations $generations_to_delete
-        fi
-        ${pkgs.nix}/bin/nix-collect-garbage
-      '';
-      serviceConfig.Type = "oneshot";
+    nix.gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
     };
 
     environment.systemPackages = with pkgs; [
