@@ -41,8 +41,9 @@
 
     xdg.portal = {
       enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-hyprland ];
-      configPackages = [ pkgs.xdg-desktop-portal-hyprland ];
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      configPackages = [ ];
+      config.common.default = "*";
     };
 
     networking.hostName = "nixos";
@@ -160,7 +161,7 @@
       wireshark cmake ardour blueberry vesktop audacity font-awesome fastfetch gnugrep
       gcc gnumake ninja kitty wofi waybar pavucontrol hyprpaper rustc cargo go openssl gnutls qemu virt-manager
       ffmpeg jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio tcpdump nmap netcat docker-compose docker-buildx
-      vulkan-tools vulkan-loader vulkan-validation-layers brave hyprland vlc pandoc kdePackages.okular xorg.xinit libva-utils obs-studio xdg-desktop-portal-hyprland
+      vulkan-tools vulkan-loader vulkan-validation-layers brave hyprland vlc pandoc kdePackages.okular xorg.xinit libva-utils obs-studio
       xfce.thunar xfce.thunar-volman gvfs udiskie polkit_gnome framework-tool brightnessctl
       gimp inkscape blender libreoffice krita protobufc grpc pkgconf
       wl-clipboard grim slurp
@@ -182,7 +183,6 @@
     ] ++ lib.optionals config.custom.steam.enable [
       steam
       steam-run
-      proton-ge-bin
       linuxConsoleTools
       lutris
       wineWowPackages.stable
