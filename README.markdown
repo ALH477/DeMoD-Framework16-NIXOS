@@ -200,3 +200,4 @@ MIT License. See `LICENSE`.
 - **NixOS Community**: For nixpkgs and nixos-hardware.
 - **Framework**: For open hardware design.
 - **Determinate Systems**: For deployment tools enhancing NixOS reliability.
+- **xAI**: For Grok's grievances.
