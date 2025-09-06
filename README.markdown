@@ -1,7 +1,7 @@
 # NixOS Configuration for DeMoD Communication Framework Development
 
 This repository provides a streamlined NixOS configuration optimized for developing the [DeMoD Communication Framework (DCF)](https://github.com/ALH477/DeMoD-Communication-Framework). Tailored for the Framework 16-inch 7040 AMD laptop but adaptable to other hardware, it supports networking programming with the D-LISP SDK, a modern Hyprland Wayland desktop, and optional gaming via Steam. It includes `openvscode-server` for LLM-integrated coding (e.g., GitHub Copilot) and is designed for developers working on IoT, P2P networking, and Lisp-based projects.
-
+[podcast](https://open.spotify.com/episode/5A7XIxdhkQEw3fWfAUEcHF?si=GLkiRqdRQkCrLd_mlE6XiQ)
 ## Features
 
 - **Networking Development**:
