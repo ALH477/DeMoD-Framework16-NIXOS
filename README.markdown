@@ -28,6 +28,48 @@ This repository provides a streamlined NixOS configuration optimized for develop
 - **Performance Optimizations**:
   - Achieves 0% CPU usage at idle, ensuring high efficiency and low power consumption on NixOS.
 
+## System Packages
+
+The configuration includes the following packages, grouped by category, to support development, networking, multimedia, and system management:
+
+- **Core Tools**:
+  - `vim`, `docker`, `git`, `git-lfs`, `gh`, `htop`, `nvme-cli`, `lm_sensors`, `s-tui`, `stress`, `dmidecode`, `util-linux`, `gparted`, `usbutils`
+- **Python and Libraries**:
+  - `python3Full`, `python3Packages.pip`, `python3Packages.virtualenv`, `python3Packages.cryptography`, `python3Packages.pycryptodome`, `python3Packages.grpcio`, `python3Packages.grpcio-tools`, `python3Packages.protobuf`, `python3Packages.numpy`, `python3Packages.matplotlib`
+- **Networking and Security**:
+  - `wireshark`, `tcpdump`, `nmap`, `netcat`, `mininet`
+- **Build and Development Tools**:
+  - `cmake`, `gcc`, `gnumake`, `ninja`, `rustc`, `cargo`, `go`, `openssl`, `gnutls`, `pkgconf`, `kicad`, `graphviz`, `mako`
+- **Multimedia and Audio**:
+  - `ardour`, `audacity`, `ffmpeg`, `jack2`, `qjackctl`, `libpulseaudio`, `pkgsi686Linux.libpulseaudio`, `pavucontrol`
+- **Virtualization and Emulation**:
+  - `qemu`, `virt-manager`, `docker-compose`, `docker-buildx`
+- **Vulkan and Graphics Tools**:
+  - `vulkan-tools`, `vulkan-loader`, `vulkan-validation-layers`, `libva-utils`
+- **Browsers and Applications**:
+  - `brave`, `vlc`, `pandoc`, `kdePackages.okular`, `obs-studio`, `firefox`, `thunderbird`
+- **Desktop Utilities**:
+  - `blueberry`, `vesktop`, `font-awesome`, `fastfetch`, `gnugrep`, `kitty`, `wofi`, `waybar`, `hyprpaper`, `brightnessctl`, `zip`, `unzip`
+- **Creative Tools**:
+  - `gimp`, `inkscape`, `blender`, `libreoffice`, `krita`
+- **File Management**:
+  - `xfce.thunar`, `xfce.thunar-volman`, `gvfs`, `udiskie`, `polkit_gnome`, `framework-tool`
+- **Screen Capture and Clipboard**:
+  - `wl-clipboard`, `grim`, `slurp`
+- **Editors and Servers**:
+  - `unstable.openvscode-server`
+- **Language-Specific Packages**:
+  - Perl: `JSON`, `GetoptLong`, `CursesUI`, `ModulePluggable`, `Appcpanminus`
+  - SBCL: `cffi`, `cl-ppcre`, `cl-json`, `cl-csv`, `usocket`, `bordeaux-threads`, `log4cl`, `trivial-backtrace`, `cl-store`, `hunchensocket`, `fiveam`, `cl-dot`, `cserial-port`
+- **Hardware and Protocol Libraries**:
+  - `libserialport`, `can-utils`, `lksctp-tools`, `cjson`, `ncurses`, `libuuid`
+- **Xorg Fallback**:
+  - `xorg.xinit`
+- **USB Flashing Tools**:
+  - `unetbootin`, `popsicle`, `gnome-disk-utility`
+- **Gaming (Optional, enabled via `custom.steam.enable`)**:
+  - `steam`, `steam-run`, `linuxConsoleTools`, `lutris`, `wineWowPackages.stable`, `proton-ge-bin`
+
 ## Use Cases
 
 - **IoT and P2P Networking Development**:
