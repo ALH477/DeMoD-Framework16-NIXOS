@@ -192,4 +192,3 @@ MIT License. See `LICENSE`.
 - **NixOS Community**: For nixpkgs and nixos-hardware.
 - **Framework**: For open hardware design.
 
-</xaiArtifact>
