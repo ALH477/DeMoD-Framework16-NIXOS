@@ -56,3 +56,95 @@ This repository provides a streamlined NixOS configuration optimized for develop
    ```bash
    git clone https://github.com/ALH477/DeMoD-Framework16-NIXOS
    cd DeMoD-Framework16-NIXOS
+   ```
+
+2. **Generate Hardware Configuration** (non-Framework hardware):
+   ```bash
+   sudo nixos-generate-config --dir .
+   ```
+
+3. **Apply Configuration**:
+   ```bash
+   sudo nixos-rebuild switch --flake .#nixos
+   ```
+
+4. **Enable Steam** (optional):
+   In `configuration.nix`, set:
+   ```nix
+   custom.steam.enable = true;
+   ```
+   Rebuild:
+   ```bash
+   sudo nixos-rebuild switch --flake .#nixos
+   ```
+
+5. **Verify Quicklisp**:
+   Quicklisp installs automatically for `asher` on login. Test:
+   ```bash
+   sbcl --eval '(ql:quickload :cffi)' --quit
+   ```
+
+6. **Run OpenVSCode Server**:
+   As `asher`:
+   ```bash
+   openvscode-server --port 3000
+   ```
+   Access at `http://localhost:3000`, install GitHub Copilot, and authenticate.
+
+7. **Test DCF**:
+   Clone DCF:
+   ```bash
+   git clone --recurse-submodules https://github.com/ALH477/DeMoD-Communication-Framework
+   cd DeMoD-Communication-Framework
+   ```
+   Run example:
+   ```bash
+   sbcl --load lisp/src/d-lisp.lisp --eval '(d-lisp:main "quick-start-client" "lisp/config.json")'
+   ```
+
+## Notes
+
+- **Zigbee/LoRaWAN**: DCF’s D-LISP SDK requires `libzigbee` and `liblorawan`, unavailable in nixpkgs. Use Docker (`docker-compose.yml`) or custom derivations.
+- **Hyprland Customization**: Edit `~/.config/hypr/hyprland.conf` for keybindings.
+- **Framework Modules**: Enable with:
+  ```nix
+  hardware.framework.enable = true;
+  hardware.fw-fanctrl.enable = true;
+  ```
+- **Docker**: Use `docker-compose.yml` for DCF testing with Zigbee/LoRaWAN.
+
+## Directory Structure
+
+```
+DeMoD-Framework16-NIXOS/
+├── flake.nix               # Flake configuration
+├── configuration.nix       # Main NixOS configuration
+├── hardware-configuration.nix  # Hardware-specific settings
+├── README.md              # This file
+├── LICENSE                # MIT License
+├── CONTRIBUTING.md        # Contribution guidelines
+└── docker/
+    └── docker-compose.yml  # DCF testing setup
+```
+
+## Contributing
+
+1. Fork the repository.
+2. Create a branch (`git checkout -b feature/your-feature`).
+3. Commit changes (`git commit -m "Add your feature"`).
+4. Push (`git push origin feature/your-feature`).
+5. Open a Pull Request.
+
+See `CONTRIBUTING.md` for details.
+
+## License
+
+MIT License. See `LICENSE`.
+
+## Acknowledgments
+
+- **DeMoD LLC**: For DCF.
+- **NixOS Community**: For nixpkgs and nixos-hardware.
+- **Framework**: For open hardware design.
+
+</xaiArtifact>
