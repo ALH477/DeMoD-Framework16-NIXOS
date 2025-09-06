@@ -1,7 +1,7 @@
 # NixOS Configuration for DeMoD Communication Framework Development
 
-This repository provides a streamlined NixOS configuration optimized for developing the [DeMoD Communication Framework (DCF)](https://github.com/ALH477/DeMoD-Communication-Framework). Tailored for the Framework 16-inch 7040 AMD laptop but adaptable to other hardware, it supports networking programming with the D-LISP SDK, a modern Hyprland Wayland desktop, and optional gaming via Steam. It includes `openvscode-server` for LLM-integrated coding (e.g., GitHub Copilot) and is designed for developers working on IoT, P2P networking, and Lisp-based projects.
-[podcast](https://open.spotify.com/episode/5A7XIxdhkQEw3fWfAUEcHF?si=GLkiRqdRQkCrLd_mlE6XiQ)
+This repository provides a streamlined NixOS configuration optimized for developing the [DeMoD Communication Framework (DCF)](https://github.com/ALH477/DeMoD-Communication-Framework). Tailored for the Framework 16-inch 7040 AMD laptop but adaptable to other hardware, it supports networking programming with the D-LISP SDK, a modern Hyprland Wayland desktop, and optional gaming via Steam. It includes `openvscode-server` for LLM-integrated coding (e.g., GitHub Copilot) and is designed for developers working on IoT, P2P networking, and Lisp-based projects. The configuration leverages Determinate Systems' tools to enhance deployment reliability and efficiency.
+
 ## Features
 
 - **Networking Development**:
@@ -87,6 +87,14 @@ The configuration includes the following packages, grouped by category, to suppo
 - **System Administration**:
   - Manage containers with Docker, monitor hardware with `s-tui`, and maintain system hygiene with automated garbage collection.
 
+## Determinate Systems Usage
+
+This configuration integrates tools from [Determinate Systems](https://determinate.systems/) to enhance the reliability, reproducibility, and efficiency of the NixOS deployment process. Specifically:
+
+- **Determinate Nix Installer**: Included via the `determinate` input in `flake.nix`, this provides a robust installation mechanism for Nix, ensuring consistent setup across systems. It simplifies initial deployment and reduces errors during environment setup.
+- **NixOS Module**: The `determinate.nixosModules.default` module, imported in `flake.nix`, enhances system configuration with tools like `nix-dram`, which optimizes Nix store operations and improves build performance. This contributes to the configuration’s efficiency, helping achieve 0% CPU usage at idle by minimizing background processes.
+- **Benefits**: Determinate Systems’ tools streamline flake-based deployments, improve error handling, and provide diagnostic utilities, making the configuration more reliable for developers working on complex projects like DCF. They also ensure compatibility with the latest Nix features, aligning with the configuration’s use of NixOS 25.05 and `nixpkgs-unstable`.
+
 ## Prerequisites
 
 - NixOS 25.05+ with Flakes enabled.
@@ -156,13 +164,13 @@ The configuration includes the following packages, grouped by category, to suppo
   hardware.fw-fanctrl.enable = true;
   ```
 - **Docker**: Use `docker-compose.yml` for DCF testing with Zigbee/LoRaWAN.
-- **Efficiency**: The configuration is tuned for minimal resource usage, achieving 0% CPU at idle, making it ideal for battery-powered development on laptops.
+- **Efficiency**: The configuration is tuned for minimal resource usage, achieving 0% CPU at idle, making it ideal for battery-powered development on laptops. Determinate Systems’ tools enhance this efficiency by optimizing Nix operations.
 
 ## Directory Structure
 
 ```
 DeMoD-Framework16-NIXOS/
-├── flake.nix               # Flake configuration
+├── flake.nix               # Flake configuration with Determinate Systems integration
 ├── configuration.nix       # Main NixOS configuration
 ├── hardware-configuration.nix  # Hardware-specific settings
 ├── README.md              # This file
@@ -191,4 +199,4 @@ MIT License. See `LICENSE`.
 - **DeMoD LLC**: For DCF.
 - **NixOS Community**: For nixpkgs and nixos-hardware.
 - **Framework**: For open hardware design.
-
+- **Determinate Systems**: For deployment tools enhancing NixOS reliability.
