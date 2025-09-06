@@ -201,4 +201,4 @@ MIT License. See `LICENSE`.
 - **Framework**: For open hardware design.
 - **Determinate Systems**: For deployment tools enhancing NixOS reliability.
 - **xAI**: For Grok's grievances.
- -**Asher LeRoy**: For being obssessed.
+- **Asher LeRoy**: For being obssessed.
