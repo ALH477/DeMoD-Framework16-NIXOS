@@ -177,7 +177,7 @@
       # Desktop utilities
       blueberry vesktop font-awesome fastfetch gnugrep kitty wofi waybar hyprpaper brightnessctl zip unzip
       # Creative tools
-      gimp inkscape blender libreoffice krita
+      gimp kdePackages.kdenlive inkscape blender libreoffice krita
       # File management
       xfce.thunar xfce.thunar-volman gvfs udiskie polkit_gnome framework-tool
       # Screen capture and clipboard
