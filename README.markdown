@@ -51,7 +51,7 @@ The configuration includes the following packages, grouped by category, to suppo
 - **Desktop Utilities**:
   - `blueberry`, `vesktop`, `font-awesome`, `fastfetch`, `gnugrep`, `kitty`, `wofi`, `waybar`, `hyprpaper`, `brightnessctl`, `zip`, `unzip`
 - **Creative Tools**:
-  - `gimp`, `inkscape`, `blender`, `libreoffice`, `krita`
+  - `gimp`,`kdenlive`, `inkscape`, `blender`, `libreoffice`, `krita`
 - **File Management**:
   - `xfce.thunar`, `xfce.thunar-volman`, `gvfs`, `udiskie`, `polkit_gnome`, `framework-tool`
 - **Screen Capture and Clipboard**:
