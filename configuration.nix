@@ -57,6 +57,18 @@
     hardware.enableRedistributableFirmware = true;
     powerManagement.cpuFreqGovernor = "performance"; # Default governor, overridden by power-profiles-daemon
 
+    # Enable Mesa drivers from unstable channel
+    hardware.opengl = {
+      enable = true;
+      package = pkgs.unstable.mesa;  # Latest Mesa (25.2.3 or newer)
+      extraPackages = with pkgs; [
+        amdvlk  # AMD Vulkan driver
+        vaapiVdpau  # Video acceleration
+        libvdpau-va-gl  # VDPAU driver
+        rocmPackages.clr.icd  # OpenCL support for AMD
+      ];
+    };
+
     time.timeZone = "America/Los_Angeles";
     i18n.defaultLocale = "en_US.UTF-8";
     i18n.extraLocaleSettings = {
@@ -172,6 +184,8 @@
       qemu virt-manager docker-compose docker-buildx
       # Vulkan and graphics tools
       vulkan-tools vulkan-loader vulkan-validation-layers libva-utils
+      # 32-bit Vulkan for compatibility
+      pkgsi686Linux.amdvlk
       # Browsers and apps
       brave vlc pandoc kdePackages.okular obs-studio firefox thunderbird
       # Desktop utilities
