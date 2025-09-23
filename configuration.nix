@@ -26,20 +26,27 @@
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.kernelPackages = pkgs.linuxPackages_latest;
-    boot.kernelParams = [ "amdgpu.abmlevel=0" ];
+    boot.kernelParams = [ 
+      "amdgpu.abmlevel=0"
+      "amdgpu.sg_display=0"
+      "amdgpu.exp_hw_support=1"
+    ];
+    boot.initrd.kernelModules = [ "amdgpu" ];
+    boot.kernelModules = [ "amdgpu" ];
 
     services.displayManager.sddm = {
       enable = true;
-      wayland.enable = true;
+      wayland.enable = false;  # Keep X11 for stability
     };
     services.displayManager.defaultSession = "hyprland";
     services.xserver.enable = true;
+    services.xserver.videoDrivers = [ "amdgpu" ];
     services.xserver.desktopManager.cinnamon.enable = true;
     services.xserver.windowManager.dwm.enable = true;
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
-      package = pkgs.unstable.hyprland;
+      package = pkgs.hyprland;  # Use stable Hyprland to match Mesa
     };
     systemd.defaultUnit = lib.mkForce "graphical.target";
 
@@ -57,15 +64,19 @@
     hardware.enableRedistributableFirmware = true;
     powerManagement.cpuFreqGovernor = "performance"; # Default governor, overridden by power-profiles-daemon
 
-    # Enable Mesa drivers from unstable channel
-    hardware.opengl = {
+    # Enable Mesa drivers (stable for now to avoid instability)
+    hardware.graphics = {
       enable = true;
-      package = pkgs.unstable.mesa;  # Latest Mesa (25.2.3 or newer)
+      enable32Bit = true;
+      package = pkgs.mesa;  # Stable Mesa
       extraPackages = with pkgs; [
         amdvlk  # AMD Vulkan driver
         vaapiVdpau  # Video acceleration
         libvdpau-va-gl  # VDPAU driver
         rocmPackages.clr.icd  # OpenCL support for AMD
+      ];
+      extraPackages32 = with pkgs.pkgsi686Linux; [
+        amdvlk  # 32-bit AMD Vulkan for compatibility
       ];
     };
 
@@ -184,8 +195,8 @@
       qemu virt-manager docker-compose docker-buildx
       # Vulkan and graphics tools
       vulkan-tools vulkan-loader vulkan-validation-layers libva-utils
-      # 32-bit Vulkan for compatibility
-      pkgsi686Linux.amdvlk
+      # Doom 3 source port
+      dhewm3 darkradiant
       # Browsers and apps
       brave vlc pandoc kdePackages.okular obs-studio firefox thunderbird
       # Desktop utilities
@@ -206,7 +217,7 @@
         cffi cl-ppcre cl-json cl-csv usocket bordeaux-threads log4cl trivial-backtrace cl-store hunchensocket fiveam cl-dot cserial-port
       ]))
       # Hardware and protocol libs
-      libserialport can-utils lksctp-tools cjson ncurses libuuid kicad graphviz mako
+      libserialport can-utils lksctp-tools cjson ncurses libuuid kicad graphviz mako openscad freecad
       # Xorg fallback
       xorg.xinit
       # USB flashing tools
@@ -260,7 +271,6 @@
 
     environment.sessionVariables = {
       QT_QPA_PLATFORM = "wayland;xcb";
-      XDG_SESSION_TYPE = "wayland";
       NIXOS_OZONE_WL = "1";
     };
 
