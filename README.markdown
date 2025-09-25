@@ -19,6 +19,7 @@ This repository provides a streamlined NixOS configuration optimized for develop
 - **Hardware Support**:
   - Optimized for Framework 16-inch 7040 AMD via `nixos-hardware` and `fw-fanctrl`.
   - Generalized for other hardware with optional Framework modules.
+  - Virtual camera support via `v4l2loopback` kernel module for screen sharing and streaming applications.
 - **Optional Gaming**:
   - Steam, Proton, GameMode, Lutris, and Wine (via `custom.steam.enable`).
 - **System Management**:
@@ -39,23 +40,25 @@ The configuration includes the following packages, grouped by category, to suppo
 - **Networking and Security**:
   - `wireshark`, `tcpdump`, `nmap`, `netcat`, `mininet`
 - **Build and Development Tools**:
-  - `cmake`, `gcc`, `gnumake`, `ninja`, `rustc`, `cargo`, `go`, `openssl`, `gnutls`, `pkgconf`, `kicad`, `graphviz`, `mako`
+  - `cmake`, `gcc`, `gnumake`, `ninja`, `rustc`, `cargo`, `go`, `openssl`, `gnutls`, `pkgconf`, `kicad`, `graphviz`, `mako`, `openscad`, `freecad`
 - **Multimedia and Audio**:
   - `ardour`, `audacity`, `ffmpeg`, `jack2`, `qjackctl`, `libpulseaudio`, `pkgsi686Linux.libpulseaudio`, `pavucontrol`
 - **Virtualization and Emulation**:
   - `qemu`, `virt-manager`, `docker-compose`, `docker-buildx`
 - **Vulkan and Graphics Tools**:
   - `vulkan-tools`, `vulkan-loader`, `vulkan-validation-layers`, `libva-utils`
+- **Doom 3 Source Port**:
+  - `dhewm3`, `darkradiant`
 - **Browsers and Applications**:
   - `brave`, `vlc`, `pandoc`, `kdePackages.okular`, `obs-studio`, `firefox`, `thunderbird`
 - **Desktop Utilities**:
   - `blueberry`, `vesktop`, `font-awesome`, `fastfetch`, `gnugrep`, `kitty`, `wofi`, `waybar`, `hyprpaper`, `brightnessctl`, `zip`, `unzip`
 - **Creative Tools**:
-  - `gimp`,`kdenlive`, `inkscape`, `blender`, `libreoffice`, `krita`
+  - `gimp`, `kdePackages.kdenlive`, `inkscape`, `blender`, `libreoffice`, `krita`
 - **File Management**:
   - `xfce.thunar`, `xfce.thunar-volman`, `gvfs`, `udiskie`, `polkit_gnome`, `framework-tool`
 - **Screen Capture and Clipboard**:
-  - `wl-clipboard`, `grim`, `slurp`
+  - `wl-clipboard`, `grim`, `slurp`, `v4l2loopback` (kernel module for virtual webcam support)
 - **Editors and Servers**:
   - `unstable.openvscode-server`
 - **Language-Specific Packages**:
@@ -84,6 +87,7 @@ The configuration includes the following packages, grouped by category, to suppo
   - Run `openvscode-server` for GitHub Copilot or other LLM tools to enhance coding productivity.
 - **Gaming and Multimedia**:
   - Enable Steam for gaming or use multimedia tools (`ardour`, `audacity`, `blender`) for creative projects.
+  - Utilize `obs-studio` with `v4l2loopback` for virtual camera setups in streaming or video conferencing.
 - **System Administration**:
   - Manage containers with Docker, monitor hardware with `s-tui`, and maintain system hygiene with automated garbage collection.
 
@@ -164,6 +168,7 @@ This configuration integrates tools from [Determinate Systems](https://determina
   hardware.fw-fanctrl.enable = true;
   ```
 - **Docker**: Use `docker-compose.yml` for DCF testing with Zigbee/LoRaWAN.
+- **Virtual Camera**: The `v4l2loopback` kernel module is configured with options for a single virtual camera device, useful for applications like OBS Studio.
 - **Efficiency**: The configuration is tuned for minimal resource usage, achieving 0% CPU at idle, making it ideal for battery-powered development on laptops. Determinate Systems’ tools enhance this efficiency by optimizing Nix operations.
 
 ## Directory Structure
