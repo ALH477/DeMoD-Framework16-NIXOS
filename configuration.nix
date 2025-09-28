@@ -1,3 +1,4 @@
+
 { config, pkgs, lib, nixpkgs-unstable, ... }:
 
 {
@@ -32,7 +33,11 @@
       "amdgpu.exp_hw_support=1"
     ];
     boot.initrd.kernelModules = [ "amdgpu" ];
-    boot.kernelModules = [ "amdgpu" ];
+    boot.kernelModules = [ "amdgpu" "v4l2loopback" ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+    boot.extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=10 card_label="Virtual Cam" exclusive_caps=1
+    '';
 
     services.displayManager.sddm = {
       enable = true;
@@ -190,7 +195,7 @@
       # Build and dev tools
       cmake gcc gnumake ninja rustc cargo go openssl gnutls pkgconf
       # Multimedia and audio
-      ardour audacity ffmpeg jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio pavucontrol
+      ardour audacity ffmpeg-full jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio pavucontrol
       # Virtualization and emulation
       qemu virt-manager docker-compose docker-buildx
       # Vulkan and graphics tools
@@ -206,7 +211,7 @@
       # File management
       xfce.thunar xfce.thunar-volman gvfs udiskie polkit_gnome framework-tool
       # Screen capture and clipboard
-      wl-clipboard grim slurp
+      wl-clipboard grim slurp v4l-utils
       # Networking simulation
       mininet
       # Editors and servers
@@ -274,6 +279,43 @@
       NIXOS_OZONE_WL = "1";
     };
 
+    services.logind.extraConfig = ''
+      HandleLidSwitch=ignore
+      HandleLidSwitchExternalPower=ignore
+      HandleLidSwitchDocked=ignore
+    '';
+
+    environment.etc."hypr/lid.sh" = {
+      text = ''
+        #!/usr/bin/env bash
+        hyprctl keyword monitor "eDP-2,disable"  # Always disable laptop screen on lid close
+        if [[ $1 == "open" ]]; then
+          hyprctl keyword monitor "eDP-2,2560x1600@165,auto,1"
+        fi
+      '';
+      mode = "0755";
+    };
+
+    environment.etc."hypr/toggle_clamshell.sh" = {
+      text = ''
+        #!/usr/bin/env bash
+        INTERNAL="eDP-2"
+        if [[ "$(hyprctl monitors)" =~ DP- ]]; then
+          if hyprctl monitors | grep -q "$INTERNAL" && ! hyprctl monitors | grep -q "$INTERNAL.*(disabled)"; then
+            hyprctl keyword monitor "$INTERNAL,disable"
+            notify-send "Clamshell Mode" "Laptop screen disabled"
+          else
+            hyprctl keyword monitor "$INTERNAL,2560x1600@165,auto,1"
+            notify-send "Clamshell Mode" "Laptop screen enabled"
+          fi
+        else
+          notify-send "Clamshell Mode" "No external monitor connected"
+        fi
+      '';
+      mode = "0755";
+    };
+
     system.stateVersion = "25.05";
   };
 }
+
