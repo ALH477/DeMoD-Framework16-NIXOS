@@ -1,6 +1,25 @@
 # NixOS Configuration for DeMoD Communication Framework Development
-
+```
+  ___      __  __     ___  
+ |   \ ___|  \/  |___|   \ 
+ | |) / -_) |\/| / _ \ |) |
+ |___/\___|_|  |_\___/___/                            
+```
 This repository provides a streamlined NixOS configuration optimized for developing the [DeMoD Communication Framework (DCF)](https://github.com/ALH477/DeMoD-Communication-Framework). Tailored for the Framework 16-inch 7040 AMD laptop but adaptable to other hardware, it supports networking programming with the D-LISP SDK, a modern Hyprland Wayland desktop, and optional gaming via Steam. It includes `openvscode-server` for LLM-integrated coding (e.g., GitHub Copilot) and is designed for developers working on IoT, P2P networking, and Lisp-based projects. The configuration leverages Determinate Systems' tools to enhance deployment reliability and efficiency.
+
+## Power Efficiency: Achieving 0% CPU Usage at Idle
+
+This configuration achieves 0% CPU usage at idle, ensuring minimal power consumption (typically 4-8W system-wide on Framework laptops) and optimal battery life for development. The following optimizations enable this efficiency:
+
+- **Streamlined Kernel and Modules**: Uses `linuxPackages_latest` with minimal modules (`nvme`, `xhci_pci`, `thunderbolt`, etc.) and AMD microcode updates, enabling deep C-states (e.g., C6) for near-zero CPU activity.
+- **Dynamic Power Profiles**: `power-profiles-daemon` enables runtime switching to "power-saver" mode, downclocking the AMD Ryzen CPU and leveraging the `amd-pstate` driver for efficient idle states.
+- **Hardware-Specific Tuning**: Integrates `nixos-hardware` for Framework 16 AMD, with `amdgpu` parameters (`abmlevel=0`, `sg_display=0`) and `fw-fanctrl` to minimize GPU and fan wakeups.
+- **Minimal Services**: Socket-activated services (e.g., Docker) and weekly garbage collection reduce background processes, avoiding unnecessary polling.
+- **Efficient Graphics Stack**: Hyprland on Wayland with Mesa/AMDVLK drivers supports GPU power gating, minimizing compositing overhead.
+- **Determinate Systems Integration**: Tools like `nix-dram` optimize Nix builds, ensuring clean system starts without lingering processes.
+- **Event Handling**: `services.logind` ignores lid switch suspends for clamshell mode, preventing wakeups.
+
+These factors, combined with NixOS's declarative purity, eliminate bloat and ensure the system remains idle, making it ideal for battery-powered development.
 
 ## Features
 
@@ -16,6 +35,7 @@ This repository provides a streamlined NixOS configuration optimized for develop
 - **Desktop Environment**:
   - Hyprland Wayland with `wofi`, `waybar`, `hyprpaper`, `mako`, `wl-clipboard`, `grim`, `slurp`.
   - Fallback X11 support with Cinnamon and DWM.
+  - Clamshell mode support: Automatically disables the internal laptop display (`eDP-2`) when the lid is closed, allowing use with an external monitor without suspending the system. Includes a manual toggle and failsafe restore.
 - **Hardware Support**:
   - Optimized for Framework 16-inch 7040 AMD via `nixos-hardware` and `fw-fanctrl`.
   - Generalized for other hardware with optional Framework modules.
@@ -26,8 +46,6 @@ This repository provides a streamlined NixOS configuration optimized for develop
   - Docker for containerized DCF testing.
   - Weekly garbage collection for system maintenance.
   - Fingerprint authentication and power management.
-- **Performance Optimizations**:
-  - Achieves 0% CPU usage at idle, ensuring high efficiency and low power consumption on NixOS.
 
 ## System Packages
 
@@ -113,97 +131,3 @@ This configuration integrates tools from [Determinate Systems](https://determina
    git clone https://github.com/ALH477/DeMoD-Framework16-NIXOS
    cd DeMoD-Framework16-NIXOS
    ```
-
-2. **Generate Hardware Configuration** (non-Framework hardware):
-   ```bash
-   sudo nixos-generate-config --dir .
-   ```
-
-3. **Apply Configuration**:
-   ```bash
-   sudo nixos-rebuild switch --flake .#nixos
-   ```
-
-4. **Enable Steam** (optional):
-   In `configuration.nix`, set:
-   ```nix
-   custom.steam.enable = true;
-   ```
-   Rebuild:
-   ```bash
-   sudo nixos-rebuild switch --flake .#nixos
-   ```
-
-5. **Verify Quicklisp**:
-   Quicklisp installs automatically for `asher` on login. Test:
-   ```bash
-   sbcl --eval '(ql:quickload :cffi)' --quit
-   ```
-
-6. **Run OpenVSCode Server**:
-   As `asher`:
-   ```bash
-   openvscode-server --port 3000
-   ```
-   Access at `http://localhost:3000`, install GitHub Copilot, and authenticate.
-
-7. **Test DCF**:
-   Clone DCF:
-   ```bash
-   git clone --recurse-submodules https://github.com/ALH477/DeMoD-Communication-Framework
-   cd DeMoD-Communication-Framework
-   ```
-   Run example:
-   ```bash
-   sbcl --load lisp/src/d-lisp.lisp --eval '(d-lisp:main "quick-start-client" "lisp/config.json")'
-   ```
-
-## Notes
-
-- **Zigbee/LoRaWAN**: DCF’s D-LISP SDK requires `libzigbee` and `liblorawan`, unavailable in nixpkgs. Use Docker (`docker-compose.yml`) or custom derivations.
-- **Hyprland Customization**: Edit `~/.config/hypr/hyprland.conf` for keybindings.
-- **Framework Modules**: Enable with:
-  ```nix
-  hardware.framework.enable = true;
-  hardware.fw-fanctrl.enable = true;
-  ```
-- **Docker**: Use `docker-compose.yml` for DCF testing with Zigbee/LoRaWAN.
-- **Virtual Camera**: The `v4l2loopback` kernel module is configured with options for a single virtual camera device, useful for applications like OBS Studio.
-- **Efficiency**: The configuration is tuned for minimal resource usage, achieving 0% CPU at idle, making it ideal for battery-powered development on laptops. Determinate Systems’ tools enhance this efficiency by optimizing Nix operations.
-
-## Directory Structure
-
-```
-DeMoD-Framework16-NIXOS/
-├── flake.nix               # Flake configuration with Determinate Systems integration
-├── configuration.nix       # Main NixOS configuration
-├── hardware-configuration.nix  # Hardware-specific settings
-├── README.md              # This file
-├── LICENSE                # MIT License
-├── CONTRIBUTING.md        # Contribution guidelines
-└── docker/
-    └── docker-compose.yml  # DCF testing setup
-```
-
-## Contributing
-
-1. Fork the repository.
-2. Create a branch (`git checkout -b feature/your-feature`).
-3. Commit changes (`git commit -m "Add your feature"`).
-4. Push (`git push origin feature/your-feature`).
-5. Open a Pull Request.
-
-See `CONTRIBUTING.md` for details.
-
-## License
-
-MIT License. See `LICENSE`.
-
-## Acknowledgments
-
-- **DeMoD LLC**: For DCF.
-- **NixOS Community**: For nixpkgs and nixos-hardware.
-- **Framework**: For open hardware design.
-- **Determinate Systems**: For deployment tools enhancing NixOS reliability.
-- **xAI**: For Grok's grievances.
-- **Asher LeRoy**: For being obsessed.
