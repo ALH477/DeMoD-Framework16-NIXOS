@@ -189,19 +189,19 @@
       # Python and libs
       python3Full python3Packages.pip python3Packages.virtualenv python3Packages.cryptography python3Packages.pycryptodome
       python3Packages.grpcio python3Packages.grpcio-tools python3Packages.protobuf
-      python3Packages.numpy python3Packages.matplotlib
+      python3Packages.numpy python3Packages.matplotlib python3Packages.python-snappy
       # Networking and security
       wireshark tcpdump nmap netcat
       # Build and dev tools
-      cmake gcc gnumake ninja rustc cargo go openssl gnutls pkgconf
+      cmake gcc gnumake ninja rustc cargo go openssl gnutls pkgconf snappy
       # Multimedia and audio
-      ardour audacity ffmpeg-full jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio pavucontrol
+      ardour audacity ffmpeg-full jack2 qjackctl libpulseaudio pkgsi686Linux.libpulseaudio pavucontrol guitarix
       # Virtualization and emulation
       qemu virt-manager docker-compose docker-buildx
       # Vulkan and graphics tools
       vulkan-tools vulkan-loader vulkan-validation-layers libva-utils
       # Doom 3 source port
-      dhewm3 darkradiant
+      dhewm3 darkradiant r2modman
       # Browsers and apps
       brave vlc pandoc kdePackages.okular obs-studio firefox thunderbird
       # Desktop utilities
