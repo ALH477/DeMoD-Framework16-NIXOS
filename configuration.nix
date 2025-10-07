@@ -1,4 +1,3 @@
-
 { config, pkgs, lib, nixpkgs-unstable, ... }:
 
 {
@@ -187,9 +186,18 @@
       # Core tools
       vim docker git git-lfs gh htop nvme-cli lm_sensors s-tui stress dmidecode util-linux gparted usbutils
       # Python and libs
-      python3Full python3Packages.pip python3Packages.virtualenv python3Packages.cryptography python3Packages.pycryptodome
-      python3Packages.grpcio python3Packages.grpcio-tools python3Packages.protobuf
-      python3Packages.numpy python3Packages.matplotlib python3Packages.python-snappy
+      (python3Full.withPackages (ps: with ps; [
+        pip
+        virtualenv
+        cryptography
+        pycryptodome
+        grpcio
+        grpcio-tools
+        protobuf
+        numpy
+        matplotlib
+        python-snappy
+      ]))
       # Networking and security
       wireshark tcpdump nmap netcat
       # Build and dev tools
@@ -318,4 +326,3 @@
     system.stateVersion = "25.05";
   };
 }
-
