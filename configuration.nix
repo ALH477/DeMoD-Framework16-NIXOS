@@ -213,7 +213,7 @@
       # Browsers and apps
       brave vlc pandoc kdePackages.okular obs-studio firefox thunderbird
       # Desktop utilities
-      blueberry vesktop font-awesome fastfetch gnugrep kitty wofi waybar hyprpaper brightnessctl zip unzip
+      blueberry vesktop font-awesome fastfetch gnugrep kitty wofi waybar hyprpaper brightnessctl zip unzip obsidian
       # Creative tools
       gimp kdePackages.kdenlive inkscape blender libreoffice krita
       # File management
