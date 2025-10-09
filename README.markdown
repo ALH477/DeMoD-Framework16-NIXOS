@@ -70,7 +70,7 @@ The configuration includes the following packages, grouped by category, to suppo
 - **Browsers and Applications**:
   - `brave`, `vlc`, `pandoc`, `kdePackages.okular`, `obs-studio`, `firefox`, `thunderbird`
 - **Desktop Utilities**:
-  - `blueberry`, `vesktop`, `font-awesome`, `fastfetch`, `gnugrep`, `kitty`, `wofi`, `waybar`, `hyprpaper`, `brightnessctl`, `zip`, `unzip`
+  - `blueberry`, `vesktop`, `font-awesome`, `fastfetch`, `gnugrep`, `kitty`, `wofi`, `waybar`, `hyprpaper`, `brightnessctl`, `zip`, `unzip`, `obsidian`
 - **Creative Tools**:
   - `gimp`, `kdePackages.kdenlive`, `inkscape`, `blender`, `libreoffice`, `krita`
 - **File Management**:
