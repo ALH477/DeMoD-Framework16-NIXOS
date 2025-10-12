@@ -197,6 +197,7 @@
         numpy
         matplotlib
         python-snappy
+        skidl
       ]))
       # Networking and security
       wireshark tcpdump nmap netcat
