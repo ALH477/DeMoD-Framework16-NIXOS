@@ -224,7 +224,7 @@
       # Networking simulation
       mininet
       # Editors and servers
-      unstable.openvscode-server
+      unstable.openvscode-server opencode
       # Language-specific packages
       (perl.withPackages (ps: with ps; [ JSON GetoptLong CursesUI ModulePluggable Appcpanminus ]))
       (sbcl.withPackages (ps: with ps; [
