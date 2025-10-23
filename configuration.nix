@@ -212,7 +212,7 @@
       # Doom 3 source port
       dhewm3 darkradiant r2modman
       # Browsers and apps
-      brave vlc pandoc kdePackages.okular obs-studio firefox thunderbird
+      brave vlc pandoc kdePackages.okular obs-studio floorp-bin thunderbird
       # Desktop utilities
       blueberry legcord font-awesome fastfetch gnugrep kitty wofi waybar hyprpaper brightnessctl zip unzip obsidian
       # Creative tools
