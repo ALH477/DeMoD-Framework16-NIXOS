@@ -244,8 +244,7 @@
       lutris
       wineWowPackages.stable
       dhewm3 darkradiant r2modman
-      slade srb2 zandronum-alpha
-      zandronum-alpha-server
+      slade srb2
       protonup-qt beyond-all-reason
       doomseeker chocolate-doom rbdoom
       quakespasm vkquake TrenchBroom
