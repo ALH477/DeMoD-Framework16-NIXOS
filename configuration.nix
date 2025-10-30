@@ -22,7 +22,8 @@
     nixpkgs.config.allowUnfree = true;
 
     custom.steam.enable = true;
-
+    
+    boot.plymouth.enable = true;
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -40,13 +41,13 @@
 
     services.displayManager.sddm = {
       enable = true;
-      wayland.enable = false;  # Keep X11 for stability
+      wayland.enable = true;  # Keep X11 for stability fallback
     };
     services.displayManager.defaultSession = "hyprland";
-    services.xserver.enable = true;
+    services.xserver.enable = false;
     services.xserver.videoDrivers = [ "amdgpu" ];
-    services.xserver.desktopManager.cinnamon.enable = true;
-    services.xserver.windowManager.dwm.enable = true;
+    services.xserver.desktopManager.cinnamon.enable = false;
+    services.xserver.windowManager.dwm.enable = false;
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
