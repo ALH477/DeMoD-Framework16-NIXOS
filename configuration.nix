@@ -209,8 +209,6 @@
       qemu virt-manager docker-compose docker-buildx
       # Vulkan and graphics tools
       vulkan-tools vulkan-loader vulkan-validation-layers libva-utils
-      # Doom 3 source port
-      dhewm3 darkradiant r2modman
       # Browsers and apps
       brave vlc pandoc kdePackages.okular obs-studio floorp-bin thunderbird
       # Desktop utilities
@@ -244,6 +242,13 @@
       linuxConsoleTools
       lutris
       wineWowPackages.stable
+      dhewm3 darkradiant r2modman
+      slade srb2 zandronum-alpha
+      zandronum-alpha-server
+      protonup-qt beyond-all-reason
+      doomseeker chocolate-doom rbdoom
+      quakespasm vkquake TrenchBroom
+      godot Quake3e retroarch-free
     ];
 
     programs.steam = lib.mkIf config.custom.steam.enable {
