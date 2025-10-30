@@ -23,6 +23,7 @@
         fw-fanctrl.nixosModules.default
         ./hardware-configuration.nix
         ./configuration.nix
+        ./modules/plymouth.nix
         ({ config, lib, ... }: {
           options = {
             hardware.framework.enable = lib.mkEnableOption "Framework 16-inch 7040 AMD support";
