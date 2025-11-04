@@ -41,7 +41,7 @@
 
     services.displayManager.sddm = {
       enable = true;
-      wayland.enable = true;  # Keep X11 for stability fallback
+      wayland.enable = false;  # Keep X11 for stability fallback
     };
     services.displayManager.defaultSession = "hyprland";
     services.xserver.enable = false;
